@@ -10,7 +10,7 @@ public class Runner extends GameObject {
 		speed=7;
 	}
 	void update() {
-	
+	collisionBox.setBounds(x, y, width, height);
 	}
 	void draw(Graphics g) {
 		g.drawRect(x, y, width, height);

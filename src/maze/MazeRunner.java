@@ -20,5 +20,6 @@ JFrame frame=new JFrame();
 		frame.setSize(width, height);
 		frame.addKeyListener(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		panel.startGame();
 	}
 }

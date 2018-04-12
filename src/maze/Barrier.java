@@ -8,7 +8,7 @@ public class Barrier extends GameObject{
 		super(x, y, width, height);
 	}
 	void update() {
-		
+	collisionBox.setBounds(x, y, width, height);
 	}
 	void draw(Graphics g) {
 		g.drawRect(x, y, width, height);

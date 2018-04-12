@@ -10,7 +10,7 @@ public class Chaser extends GameObject {
 		speed=5;
 	}
 	void update() {
-		
+		collisionBox.setBounds(x, y, width, height);
 	}
 	void draw(Graphics g) {
 		g.drawRect(x, y, width, height);
