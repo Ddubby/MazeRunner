@@ -18,16 +18,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int END_STATE = 2;
 	int currentState = MENU_STATE;
 	Font titleFont = new Font("Times New Roman", Font.BOLD, 48);
-	Runner runner = new Runner(50, 225, 10, 10);
-	Chaser follower = new Chaser(70, 200, 10, 10);
+	static Runner runner = new Runner(50, 220, 10, 10);
+	Chaser chaser = new Chaser(70, 200, 10, 10);
 	Barrier barrier1 = new Barrier(300, 0, 30, 200);
 	Barrier barrier2 = new Barrier(100, 0, 30, 250);
 	Barrier barrier3 = new Barrier(600, 100, 30, 200);
 	Barrier barrier4 = new Barrier(500, 0, 30, 150);
-	Barrier barrier5 = new Barrier(700, 50, 30, 250);
+	Barrier barrier5 = new Barrier(700, 0, 30, 250);
 	Barrier barrier6 = new Barrier(200, 150, 30, 150);
-	Barrier barrier7 = new Barrier(400, 0, 30, 225);
+	Barrier barrier7 = new Barrier(400, 70, 30, 225);
 	ObjectManager manager = new ObjectManager(runner);
+	ObjectManagerChaser managerEnemy = new ObjectManagerChaser(chaser);
 	Timer timer = new Timer(1000 / 60, this);
 	public GamePanel() {
 
@@ -43,12 +44,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void drawGameState(Graphics g) {
 		manager.draw(g);
+		managerEnemy.draw(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
 		g.setColor(Color.RED);
 		runner.draw(g);
 		g.setColor(Color.YELLOW);
-		follower.draw(g);
+		chaser.draw(g);
 		g.setColor(Color.BLUE);
 		barrier1.draw(g);
 		barrier2.draw(g);
@@ -64,7 +66,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.addBarrier(barrier5);
 		manager.addBarrier(barrier6);
 		manager.addBarrier(barrier7);
-		manager.addChaser(follower);
+		manager.addChaser(chaser);
 	}
 
 	void drawEndState(Graphics g) {
@@ -80,6 +82,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void updateGameState() {
 		manager.update();
 		manager.checkCollision();
+		managerEnemy.ChaserAIRight();
+
 		if (!runner.isAlive) {
 			currentState = END_STATE;
 		}
@@ -121,6 +125,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 			if (currentState == END_STATE) {
+				runner=new Runner(50, 220, 10, 10);
+				manager=new ObjectManager(runner);
+				chaser=new Chaser(70, 200, 10, 10);
+				managerEnemy=new ObjectManagerChaser(chaser);
 				currentState = MENU_STATE;
 			} else if (currentState == MENU_STATE) {
 				currentState = GAME_STATE;
@@ -130,8 +138,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (runner.x + runner.speed <= 794) {
-				runner.x = runner.x + runner.speed;
+			if (runner.x + runner.speed <= 795) {
+				runner.x = runner.x + runner.speed;	
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {

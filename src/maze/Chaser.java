@@ -7,7 +7,7 @@ public class Chaser extends GameObject {
 	
 	Chaser(int x, int y, int width, int height){
 		super(x, y, width, height);
-		speed=5;
+		speed=7;
 	}
 	void update() {
 		collisionBox.setBounds(x, y, width, height);

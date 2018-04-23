@@ -3,8 +3,8 @@ package maze;
 import javax.swing.JFrame;
 
 public class MazeRunner {
-static int width=803;
-static int height=300;
+static int width=800;
+static int height=303;
 GamePanel panel=new GamePanel();
 JFrame frame=new JFrame();
 	public static void main(String[] args) {

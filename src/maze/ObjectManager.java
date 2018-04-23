@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class ObjectManager {
 	Runner runner;
 	ArrayList<Barrier> barriers = new ArrayList<Barrier>();
-	ArrayList<Chaser> chaser = new ArrayList<Chaser>();
+	ArrayList<Chaser> chasers = new ArrayList<Chaser>();
 	long enemyTimer = 0;
 
 	ObjectManager(Runner r) {
@@ -18,6 +18,9 @@ public class ObjectManager {
 		for (Barrier b : barriers) {
 			b.update();
 		}
+		for (Chaser c : chasers) {
+			c.update();
+		}
 	}
 
 	void draw(Graphics g) {
@@ -27,11 +30,8 @@ public class ObjectManager {
 		}
 	}
 
-	public void AIChaser() {
-
-	}
 	void addChaser(Chaser c) {
-		chaser.add(c);
+		chasers.add(c);
 	}
 	void addBarrier(Barrier b) {
 		barriers.add(b);
@@ -43,8 +43,8 @@ public class ObjectManager {
 				runner.isAlive = false;
 				break;
 			} else {
-				for (Chaser c : chaser) {
-					if (c.collisionBox.intersects(runner.collisionBox)) {
+				for (Chaser c : chasers) {
+					if (runner.collisionBox.intersects(c.collisionBox)) {
 						runner.isAlive = false;
 						break;
 					}
