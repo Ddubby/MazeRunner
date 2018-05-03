@@ -9,6 +9,7 @@ public class GameObject {
 	int width;
 	int height;
 	boolean isAlive=true;
+	boolean Wins=false;
 	Rectangle collisionBox = new Rectangle(x, y, width, height);
 	public GameObject(int x, int y, int width, int height){
 	this.x=x;

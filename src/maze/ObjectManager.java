@@ -8,6 +8,9 @@ public class ObjectManager {
 	ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 	ArrayList<Chaser> chasers = new ArrayList<Chaser>();
 	ArrayList<Bouncer> bouncers = new ArrayList<Bouncer>();
+	ArrayList<Teleport> teleporters = new ArrayList<Teleport>();
+	ArrayList<FinishLine> finishLines = new ArrayList<FinishLine>();
+	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	long enemyTimer = 0;
 
 	ObjectManager(Runner r) {
@@ -24,6 +27,15 @@ public class ObjectManager {
 		}
 		for (Bouncer o : bouncers) {
 			o.update();
+		}
+		for (Teleport t : teleporters) {
+			t.update();
+		}
+		for (FinishLine f : finishLines) {
+			f.update();
+		}
+		for (Projectile p : projectiles) {
+			p.update();
 		}
 	}
 
@@ -43,6 +55,16 @@ public class ObjectManager {
 		bouncers.add(o);
 	}
 
+	void addTeleport(Teleport t) {
+		teleporters.add(t);
+	}
+
+	void addFinishLine(FinishLine f) {
+		finishLines.add(f);
+	}
+	void addProjectile(Projectile p) {
+		projectiles.add(p);
+	}
 	void BouncerAI(Bouncer o) {
 		boolean intersects = false;
 		for (Barrier b : barriers) {
@@ -52,12 +74,34 @@ public class ObjectManager {
 		}
 		if (intersects) {
 			o.speed = o.speed * -1;
-			o.x=o.x+o.speed;
+			o.x = o.x + o.speed;
 		} else {
 			o.x = o.x + o.speed;
 		}
 	}
 
+	void checkWin() {
+		for (Teleport t : teleporters) {
+			if (runner.collisionBox.intersects(t.collisionBox)) {
+				runner.Wins = true;
+				break;
+			} else {
+				for (FinishLine f : finishLines) {
+					if (runner.collisionBox.intersects(f.collisionBox)) {
+						runner.Wins = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	void purgeObjects() {
+		for (int i = 0; i < projectiles.size(); i++) {
+			if (!projectiles.get(i).isAlive) {
+				projectiles.remove(i);
+			}
+		}
+	}
 	void checkCollision() {
 		for (Barrier b : barriers) {
 			if (runner.collisionBox.intersects(b.collisionBox)) {
@@ -73,6 +117,13 @@ public class ObjectManager {
 							if (runner.collisionBox.intersects(o.collisionBox)) {
 								runner.isAlive = false;
 								break;
+							} else {
+								for (Projectile p : projectiles) {
+									if(runner.collisionBox.intersects(p.collisionBox)) {
+										runner.isAlive = false;
+										break;
+									}
+								}
 							}
 						}
 					}
