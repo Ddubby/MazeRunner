@@ -11,6 +11,7 @@ public class ObjectManager {
 	ArrayList<Teleport> teleporters = new ArrayList<Teleport>();
 	ArrayList<FinishLine> finishLines = new ArrayList<FinishLine>();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	ArrayList<UpProjectile> upprojectiles = new ArrayList<UpProjectile>();
 	long enemyTimer = 0;
 
 	ObjectManager(Runner r) {
@@ -19,9 +20,6 @@ public class ObjectManager {
 
 	void update() {
 		runner.update();
-		for (Barrier b : barriers) {
-			b.update();
-		}
 		for (Chaser c : chasers) {
 			c.update();
 		}
@@ -37,9 +35,24 @@ public class ObjectManager {
 		for (Projectile p : projectiles) {
 			p.update();
 		}
+		for (UpProjectile u : upprojectiles) {
+			u.update();
+		}
 	}
 
 	void draw(Graphics g) {
+		for (Barrier b : barriers) {
+			b.draw(g);
+		}
+		for (Bouncer b : bouncers) {
+			b.draw(g);
+		}
+		for (Projectile p : projectiles) {
+			p.draw(g);
+		}
+		for (UpProjectile u : upprojectiles) {
+			u.draw(g);
+		}
 		runner.draw(g);
 	}
 
@@ -62,21 +75,29 @@ public class ObjectManager {
 	void addFinishLine(FinishLine f) {
 		finishLines.add(f);
 	}
+
 	void addProjectile(Projectile p) {
 		projectiles.add(p);
 	}
-	void BouncerAI(Bouncer o) {
-		boolean intersects = false;
-		for (Barrier b : barriers) {
-			if (b.collisionBox.intersects(o.collisionBox)) {
-				intersects = true;
+	
+	void addUpProjectile(UpProjectile u) {
+		upprojectiles.add(u);
+	}
+
+	void checkBouncerCollision() {
+		for (Bouncer o : bouncers) {
+			boolean intersects = false;
+			for (Barrier b : barriers) {
+				if (b.collisionBox.intersects(o.collisionBox)) {
+					intersects = true;
+				}
 			}
-		}
-		if (intersects) {
-			o.speed = o.speed * -1;
-			o.x = o.x + o.speed;
-		} else {
-			o.x = o.x + o.speed;
+			if (intersects) {
+				o.speed = o.speed * -1;
+				o.x = o.x + o.speed;
+			} else {
+				o.x = o.x + o.speed;
+			}
 		}
 	}
 
@@ -95,6 +116,7 @@ public class ObjectManager {
 			}
 		}
 	}
+
 	void purgeObjects() {
 		for (int i = 0; i < projectiles.size(); i++) {
 			if (!projectiles.get(i).isAlive) {
@@ -102,6 +124,7 @@ public class ObjectManager {
 			}
 		}
 	}
+
 	void checkCollision() {
 		for (Barrier b : barriers) {
 			if (runner.collisionBox.intersects(b.collisionBox)) {
@@ -119,7 +142,7 @@ public class ObjectManager {
 								break;
 							} else {
 								for (Projectile p : projectiles) {
-									if(runner.collisionBox.intersects(p.collisionBox)) {
+									if (runner.collisionBox.intersects(p.collisionBox)) {
 										runner.isAlive = false;
 										break;
 									}

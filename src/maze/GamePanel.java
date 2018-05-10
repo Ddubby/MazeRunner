@@ -21,44 +21,22 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int currentState = MENU_STATE;
 	Font titleFont = new Font("Times New Roman", Font.BOLD, 48);
 	Font enterFont = new Font("Times New Roman", Font.BOLD, 24);
+	Font instructionFont = new Font("Times New Roman", Font.BOLD, 20);
 	static Runner runner = new Runner(50, 220, 10, 10);
 	Chaser chaser = new Chaser(70, 200, 10, 10);
-	Bouncer bouncer = new Bouncer(130, 131, 10, 10);
-	Bouncer bouncer1 = new Bouncer(390, 209, 10, 10);
-	Bouncer bouncer2 = new Bouncer(510, 161, 10, 10);
-	Bouncer bouncer3 = new Bouncer(460, 49, 10, 10);
-	Bouncer bouncer4 = new Bouncer(620, 81, 10, 10);
-	Barrier barrier1 = new Barrier(300, 0, 30, 200);
-	Barrier barrier2 = new Barrier(100, 0, 30, 250);
-	Barrier barrier3 = new Barrier(600, 100, 30, 200);
-	Barrier barrier4 = new Barrier(500, 0, 30, 150);
-	Barrier barrier5 = new Barrier(700, 0, 30, 250);
-	Barrier barrier6 = new Barrier(200, 150, 30, 150);
-	Barrier barrier7 = new Barrier(400, 70, 30, 225);
 	FinishLine finish = new FinishLine(790, 0, 10, 10);
 	Teleport teleport = new Teleport(50, 210, 10, 10);
-	Projectile projectile = new Projectile(133, 0, 10, 10);
 	ObjectManager manager = new ObjectManager(runner);
 	ObjectManagerChaser managerEnemy = new ObjectManagerChaser(chaser);
 	Timer timer = new Timer(1000 / 60, this);
 
 	public GamePanel() {
-		manager.addBarrier(barrier1);
-		manager.addBarrier(barrier2);
-		manager.addBarrier(barrier3);
-		manager.addBarrier(barrier4);
-		manager.addBarrier(barrier5);
-		manager.addBarrier(barrier6);
-		manager.addBarrier(barrier7);
+		makeBarriers();
+		makeBouncers();
+		makeProjectiles();
 		manager.addChaser(chaser);
-		manager.addBouncer(bouncer);
-		manager.addBouncer(bouncer1);
-		manager.addBouncer(bouncer2);
-		manager.addBouncer(bouncer3);
-		manager.addBouncer(bouncer4);
 		manager.addTeleport(teleport);
 		manager.addFinishLine(finish);
-		manager.addProjectile(projectile);
 	}
 
 	void drawMenuState(Graphics g) {
@@ -67,68 +45,47 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		Rectangle r = new Rectangle(0, 0, MazeRunner.width, MazeRunner.height);
 		g.setColor(Color.RED);
 		drawCenteredString(g, "Maze Runner", r, titleFont);
+		g.setFont(instructionFont);
+		g.drawString("Welcome, escape the maze and you will be rewarded", 170, 200);
+		g.drawString("Use arrow keys to move", 290, 225);
+		g.drawString("Only rule is to survive", 299, 250);
+		g.drawString("Press Enter to begin", 310, 275);
 	}
 
 	void drawGameState(Graphics g) {
-		manager.draw(g);
-		managerEnemy.draw(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
+		manager.draw(g);
+		managerEnemy.draw(g);
 		g.setColor(Color.RED);
 		runner.draw(g);
 		g.setColor(Color.YELLOW);
 		chaser.draw(g);
 		g.setColor(Color.GREEN);
-		bouncer.draw(g);
-		bouncer1.draw(g);
-		bouncer2.draw(g);
-		bouncer3.draw(g);
-		bouncer4.draw(g);
 		g.setColor(Color.BLUE);
-		barrier1.draw(g);
-		barrier2.draw(g);
-		barrier3.draw(g);
-		barrier4.draw(g);
-		barrier5.draw(g);
-		barrier6.draw(g);
-		barrier7.draw(g);
 		g.setColor(Color.YELLOW);
 		finish.draw(g);
 		g.setColor(Color.BLACK);
 		teleport.draw(g);
 		g.setColor(Color.CYAN);
-		if (projectile.isAlive) {
-			projectile.draw(g);
-		}
 	}
 
 	void drawGameState2(Graphics g) {
-		manager.draw(g);
-		managerEnemy.draw(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
+		manager.draw(g);
+		managerEnemy.draw(g);
 		g.setColor(Color.RED);
 		runner.draw(g);
 		g.setColor(Color.YELLOW);
 		chaser.draw(g);
 		g.setColor(Color.GREEN);
-		bouncer.draw(g);
-		bouncer1.draw(g);
-		bouncer2.draw(g);
-		bouncer3.draw(g);
-		bouncer4.draw(g);
 		g.setColor(Color.BLUE);
-		barrier1.draw(g);
-		barrier2.draw(g);
-		barrier3.draw(g);
-		barrier4.draw(g);
-		barrier5.draw(g);
-		barrier6.draw(g);
-		barrier7.draw(g);
 		g.setColor(Color.YELLOW);
 		finish.draw(g);
 		g.setColor(Color.BLACK);
 		teleport.draw(g);
+		g.setColor(Color.CYAN);
 	}
 
 	void drawEndState(Graphics g) {
@@ -149,6 +106,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		drawCenteredString(g, "You Win!", r, titleFont);
 		g.setFont(enterFont);
 		g.drawString("Press Enter to Continue", 275, 225);
+		g.drawString("Level 1 passed!", 323, 200);
 	}
 
 	void updateMenuState() {
@@ -161,11 +119,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.checkWin();
 		manager.purgeObjects();
 		managerEnemy.ChaserAIRight();
-		manager.BouncerAI(bouncer);
-		manager.BouncerAI(bouncer1);
-		manager.BouncerAI(bouncer2);
-		manager.BouncerAI(bouncer3);
-		manager.BouncerAI(bouncer4);
+		manager.checkBouncerCollision();
 		if (!runner.isAlive) {
 			currentState = END_STATE;
 		}
@@ -178,12 +132,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.update();
 		manager.checkCollision();
 		manager.checkWin();
+		manager.purgeObjects();
 		managerEnemy.ChaserAIRight();
-		manager.BouncerAI(bouncer);
-		manager.BouncerAI(bouncer1);
-		manager.BouncerAI(bouncer2);
-		manager.BouncerAI(bouncer3);
-		manager.BouncerAI(bouncer4);
+		manager.checkBouncerCollision();
 		if (!runner.isAlive) {
 			currentState = END_STATE;
 		}
@@ -222,11 +173,35 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawWinState(g);
 
 		} else if (currentState == GAME_STATE2) {
-			
+
 			drawGameState2(g);
-			
+
 		}
 
+	}
+
+	public void makeBarriers() {
+		manager.addBarrier(new Barrier(300, 0, 30, 200));
+		manager.addBarrier(new Barrier(100, 0, 30, 250));
+		manager.addBarrier(new Barrier(600, 100, 30, 200));
+		manager.addBarrier(new Barrier(500, 0, 30, 150));
+		manager.addBarrier(new Barrier(700, 0, 30, 250));
+		manager.addBarrier(new Barrier(200, 150, 30, 150));
+		manager.addBarrier(new Barrier(400, 70, 30, 225));
+	}
+
+	public void makeBouncers() {
+		manager.addBouncer(new Bouncer(130, 131, 10, 10));
+		manager.addBouncer(new Bouncer(390, 209, 10, 10));
+		manager.addBouncer(new Bouncer(510, 161, 10, 10));
+		manager.addBouncer(new Bouncer(460, 49, 10, 10));
+		manager.addBouncer(new Bouncer(620, 81, 10, 10));
+	}
+
+	public void makeProjectiles() {
+		manager.addProjectile(new Projectile(133, 0, 10, 10));
+		manager.addProjectile(new Projectile(390, 0, 10, 10));
+		manager.addUpProjectile(new UpProjectile(430, 303, 10, 10));
 	}
 
 	@Override
@@ -244,37 +219,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				runner = new Runner(50, 220, 10, 10);
 				manager = new ObjectManager(runner);
 				chaser = new Chaser(70, 200, 10, 10);
-				bouncer = new Bouncer(130, 131, 10, 10);
-				bouncer1 = new Bouncer(390, 209, 10, 10);
-				bouncer2 = new Bouncer(510, 161, 10, 10);
-				bouncer3 = new Bouncer(460, 49, 10, 10);
-				bouncer4 = new Bouncer(620, 81, 10, 10);
-				barrier1 = new Barrier(300, 0, 30, 200);
-				barrier2 = new Barrier(100, 0, 30, 250);
-				barrier3 = new Barrier(600, 100, 30, 200);
-				barrier4 = new Barrier(500, 0, 30, 150);
-				barrier5 = new Barrier(700, 0, 30, 250);
-				barrier6 = new Barrier(200, 150, 30, 150);
-				barrier7 = new Barrier(400, 70, 30, 225);
+				makeBouncers();
+				makeBarriers();
+				makeProjectiles();
 				finish = new FinishLine(790, 0, 10, 10);
 				teleport = new Teleport(50, 210, 10, 10);
-				projectile = new Projectile(133, 0, 10, 10);
-				manager.addBarrier(barrier1);
-				manager.addBarrier(barrier2);
-				manager.addBarrier(barrier3);
-				manager.addBarrier(barrier4);
-				manager.addBarrier(barrier5);
-				manager.addBarrier(barrier6);
-				manager.addBarrier(barrier7);
 				manager.addChaser(chaser);
-				manager.addBouncer(bouncer);
-				manager.addBouncer(bouncer1);
-				manager.addBouncer(bouncer2);
-				manager.addBouncer(bouncer3);
-				manager.addBouncer(bouncer4);
 				manager.addTeleport(teleport);
 				manager.addFinishLine(finish);
-				manager.addProjectile(projectile);
 				managerEnemy = new ObjectManagerChaser(chaser);
 				currentState = MENU_STATE;
 			} else if (currentState == MENU_STATE) {
@@ -285,62 +237,43 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				runner = new Runner(50, 220, 10, 10);
 				manager = new ObjectManager(runner);
 				chaser = new Chaser(70, 200, 10, 10);
-				bouncer = new Bouncer(130, 131, 10, 10);
-				bouncer1 = new Bouncer(390, 209, 10, 10);
-				bouncer2 = new Bouncer(510, 161, 10, 10);
-				bouncer3 = new Bouncer(460, 49, 10, 10);
-				bouncer4 = new Bouncer(620, 81, 10, 10);
-				barrier1 = new Barrier(300, 0, 30, 200);
-				barrier2 = new Barrier(100, 0, 30, 250);
-				barrier3 = new Barrier(600, 100, 30, 200);
-				barrier4 = new Barrier(500, 0, 30, 150);
-				barrier5 = new Barrier(700, 0, 30, 250);
-				barrier6 = new Barrier(200, 150, 30, 150);
-				barrier7 = new Barrier(400, 70, 30, 225);
+				makeBouncers();
+				makeBarriers();
 				finish = new FinishLine(790, 0, 10, 10);
 				teleport = new Teleport(50, 210, 10, 10);
-				manager.addBarrier(barrier1);
-				manager.addBarrier(barrier2);
-				manager.addBarrier(barrier3);
-				manager.addBarrier(barrier4);
-				manager.addBarrier(barrier5);
-				manager.addBarrier(barrier6);
-				manager.addBarrier(barrier7);
 				manager.addChaser(chaser);
-				manager.addBouncer(bouncer);
-				manager.addBouncer(bouncer1);
-				manager.addBouncer(bouncer2);
-				manager.addBouncer(bouncer3);
-				manager.addBouncer(bouncer4);
 				manager.addTeleport(teleport);
 				manager.addFinishLine(finish);
+				managerEnemy = new ObjectManagerChaser(chaser);
 				currentState = GAME_STATE2;
 			}
 
 		}
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (runner.x + runner.speed <= 795) {
-				runner.x = runner.x + runner.speed;
+		if (currentState == GAME_STATE || currentState == GAME_STATE2) {
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				if (runner.x + runner.speed <= 795) {
+					runner.x = runner.x + runner.speed;
+				}
 			}
-		}
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			if (runner.x - runner.speed >= 0) {
-				runner.x = runner.x - runner.speed;
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				if (runner.x - runner.speed >= 0) {
+					runner.x = runner.x - runner.speed;
+				}
 			}
-		}
 
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			if (runner.y + runner.speed <= 270) {
-				runner.y = runner.y + runner.speed;
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				if (runner.y + runner.speed <= 270) {
+					runner.y = runner.y + runner.speed;
+				}
 			}
-		}
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			if (runner.y - runner.speed >= 0) {
-				runner.y = runner.y - runner.speed;
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				if (runner.y - runner.speed >= 0) {
+					runner.y = runner.y - runner.speed;
+				}
 			}
-		}
 
-		repaint();
+			repaint();
+		}
 	}
 
 	@Override

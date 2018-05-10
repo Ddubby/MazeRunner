@@ -1,5 +1,6 @@
 package maze;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Bouncer extends GameObject {
@@ -13,6 +14,7 @@ public class Bouncer extends GameObject {
 		collisionBox.setBounds(x, y, width, height);
 	}
 	void draw(Graphics g) {
+		g.setColor(Color.GREEN);
 		g.drawRect(x, y, width, height);
 	}
 }
