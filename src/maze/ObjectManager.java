@@ -12,6 +12,7 @@ public class ObjectManager {
 	ArrayList<FinishLine> finishLines = new ArrayList<FinishLine>();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	ArrayList<UpProjectile> upprojectiles = new ArrayList<UpProjectile>();
+	ArrayList<LeftProjectile> leftprojectiles = new ArrayList<LeftProjectile>();
 	long enemyTimer = 0;
 
 	ObjectManager(Runner r) {
@@ -38,6 +39,9 @@ public class ObjectManager {
 		for (UpProjectile u : upprojectiles) {
 			u.update();
 		}
+		for (LeftProjectile l : leftprojectiles) {
+			l.update();
+		}
 	}
 
 	void draw(Graphics g) {
@@ -52,6 +56,9 @@ public class ObjectManager {
 		}
 		for (UpProjectile u : upprojectiles) {
 			u.draw(g);
+		}
+		for (LeftProjectile l : leftprojectiles) {
+			l.draw(g);
 		}
 		runner.draw(g);
 	}
@@ -79,9 +86,13 @@ public class ObjectManager {
 	void addProjectile(Projectile p) {
 		projectiles.add(p);
 	}
-	
+
 	void addUpProjectile(UpProjectile u) {
 		upprojectiles.add(u);
+	}
+
+	void addLeftProjectile(LeftProjectile l) {
+		leftprojectiles.add(l);
 	}
 
 	void checkBouncerCollision() {
@@ -123,6 +134,11 @@ public class ObjectManager {
 				projectiles.remove(i);
 			}
 		}
+		for (int i = 0; i < upprojectiles.size(); i++) {
+			if (!upprojectiles.get(i).isAlive) {
+				upprojectiles.remove(i);
+			}
+		}
 	}
 
 	void checkCollision() {
@@ -145,6 +161,20 @@ public class ObjectManager {
 									if (runner.collisionBox.intersects(p.collisionBox)) {
 										runner.isAlive = false;
 										break;
+									} else {
+										for (UpProjectile u : upprojectiles) {
+											if (runner.collisionBox.intersects(u.collisionBox)) {
+												runner.isAlive = false;
+												break;
+											} else {
+												for (LeftProjectile l : leftprojectiles) {
+													if (runner.collisionBox.intersects(l.collisionBox)) {
+														runner.isAlive = false;
+														break;
+													}
+												}
+											}
+										}
 									}
 								}
 							}
