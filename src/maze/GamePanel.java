@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -21,16 +23,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int WIN_STATE = 3;
 	int WIN_STATE2 = 13;
 	int currentState = MENU_STATE;
+	int chaserDelay = 100;
 	Font titleFont = new Font("Times New Roman", Font.BOLD, 48);
 	Font enterFont = new Font("Times New Roman", Font.BOLD, 24);
 	Font instructionFont = new Font("Times New Roman", Font.BOLD, 20);
 	static Runner runner = new Runner(50, 220, 10, 10);
-	Chaser chaser = new Chaser(70, 200, 10, 10);
+	Chaser chaser = new Chaser(50, 210, 10, 10);
 	FinishLine finish = new FinishLine(790, 0, 10, 10);
+	FinishLine finish2 = new FinishLine(0, 0, 10, 10);
 	Teleport teleport = new Teleport(50, 210, 10, 10);
 	ObjectManager manager = new ObjectManager(runner);
-	ObjectManagerChaser managerEnemy = new ObjectManagerChaser(chaser);
+	ArrayList<GameObject> trackers = new ArrayList<GameObject>();
 	Timer timer = new Timer(1000 / 60, this);
+	Timer chaserTimer = new Timer(150, this);
 
 	public GamePanel() {
 		makeBarriers();
@@ -39,6 +44,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.addChaser(chaser);
 		manager.addTeleport(teleport);
 		manager.addFinishLine(finish);
+		manager.addFinishLine(finish2);
 	}
 
 	void drawMenuState(Graphics g) {
@@ -58,7 +64,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
 		manager.draw(g);
-		managerEnemy.draw(g);
 		g.setColor(Color.RED);
 		runner.draw(g);
 		g.setColor(Color.YELLOW);
@@ -76,7 +81,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
 		manager.draw(g);
-		managerEnemy.draw(g);
 		g.setColor(Color.RED);
 		runner.draw(g);
 		g.setColor(Color.YELLOW);
@@ -84,7 +88,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.GREEN);
 		g.setColor(Color.BLUE);
 		g.setColor(Color.YELLOW);
-		finish.draw(g);
+		finish2.draw(g);
 		g.setColor(Color.BLACK);
 		teleport.draw(g);
 		g.setColor(Color.CYAN);
@@ -141,7 +145,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.checkCollision();
 		manager.checkWin();
 		manager.purgeObjects();
-		managerEnemy.ChaserAIRight();
 		manager.checkBouncerCollision();
 		if (!runner.isAlive) {
 			currentState = END_STATE;
@@ -156,7 +159,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.checkCollision();
 		manager.checkWin();
 		manager.purgeObjects();
-		managerEnemy.ChaserAIRight();
 		manager.checkBouncerCollision();
 		if (!runner.isAlive) {
 			currentState = END_STATE2;
@@ -180,6 +182,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void startGame() {
 		timer.start();
+		chaserTimer.start();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -272,7 +275,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void makeProjectiles2() {
 		manager.addProjectile(new Projectile(120, 161, 10, 10));
 		manager.addLeftProjectile(new LeftProjectile(505, 161, 10, 10));
-		manager.addLeftProjectile(new LeftProjectile(705, 161, 10, 10));
 	}
 
 	@Override
@@ -288,14 +290,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 			if (currentState == END_STATE) {
 				runner = new Runner(50, 220, 10, 10);
+				chaser = new Chaser(50, 210, 10, 10);
 				manager = new ObjectManager(runner);
 				makeBouncers();
 				makeBarriers();
 				makeProjectiles();
-				manager.addChaser(new Chaser(70, 200, 10, 10));
+				manager.addChaser(chaser);
 				manager.addTeleport(new Teleport(50, 210, 10, 10));
 				manager.addFinishLine(new FinishLine(790, 0, 10, 10));
-				managerEnemy = new ObjectManagerChaser(chaser);
+				trackers = new ArrayList<GameObject>();
+				chaserDelay = 100;
 				currentState = GAME_STATE;
 			} else if (currentState == MENU_STATE) {
 				currentState = GAME_STATE;
@@ -303,28 +307,32 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState = END_STATE;
 			} else if (currentState == WIN_STATE) {
 				runner = new Runner(10, 220, 10, 10);
+				chaser = new Chaser(10, 210, 10, 10);
 				manager = new ObjectManager(runner);
 				makeBouncers2();
 				makeBarriers2();
 				makeProjectiles2();
-				manager.addChaser(new Chaser(70, 200, 10, 10));
+				manager.addChaser(chaser);
 				manager.addTeleport(new Teleport(10, 210, 10, 10));
 				manager.addFinishLine(new FinishLine(0, 0, 10, 10));
-				managerEnemy = new ObjectManagerChaser(chaser);
+				trackers = new ArrayList<GameObject>();
+				chaserDelay = 200;
 				currentState = GAME_STATE2;
 			} else if (currentState == END_STATE2) {
 				runner = new Runner(10, 220, 10, 10);
+				chaser = new Chaser(10, 210, 10, 10);
 				manager = new ObjectManager(runner);
 				makeBouncers2();
 				makeBarriers2();
 				makeProjectiles2();
-				manager.addChaser(new Chaser(70, 200, 10, 10));
+				manager.addChaser(chaser);
 				manager.addTeleport(new Teleport(10, 210, 10, 10));
 				manager.addFinishLine(new FinishLine(0, 0, 10, 10));
-				managerEnemy = new ObjectManagerChaser(chaser);
+				trackers = new ArrayList<GameObject>();
+				chaserDelay = 200;
 				currentState = GAME_STATE2;
 			} else if (currentState == WIN_STATE2) {
-				
+
 			}
 
 		}
@@ -332,22 +340,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				if (runner.x + runner.speed <= 795) {
 					runner.x = runner.x + runner.speed;
+					trackers.add(new GameObject(runner.x, runner.y, 0, 0));
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				if (runner.x - runner.speed >= 0) {
 					runner.x = runner.x - runner.speed;
+					trackers.add(new GameObject(runner.x, runner.y, 0, 0));
 				}
 			}
 
 			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				if (runner.y + runner.speed <= 270) {
 					runner.y = runner.y + runner.speed;
+					trackers.add(new GameObject(runner.x, runner.y, 0, 0));
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_UP) {
 				if (runner.y - runner.speed >= 0) {
 					runner.y = runner.y - runner.speed;
+					trackers.add(new GameObject(runner.x, runner.y, 0, 0));
 				}
 			}
 
@@ -361,33 +373,52 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	}
 
+	public void updateChaser() {
+		if (!trackers.isEmpty()) {
+			GameObject pos = trackers.remove(0);
+			chaser.x = pos.x;
+			chaser.y = pos.y;
+		} else {
+			
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if (currentState == MENU_STATE) {
-
-			updateMenuState();
-
-		} else if (currentState == GAME_STATE) {
-
-			updateGameState();
-
-		} else if (currentState == END_STATE) {
-
-			updateEndState();
-
-		} else if (currentState == WIN_STATE) {
-
-			updateWinState();
-
-		} else if (currentState == GAME_STATE2) {
-
-			updateGameState2();
-
-		} else if (currentState == WIN_STATE2) {
-			
+		if (e.getSource() == chaserTimer) {
+			if (chaserDelay > 0) {
+				chaserDelay--;
+			} else {
+				updateChaser();
+			}
 		}
-		repaint();
+		if (e.getSource() == timer) {
+			if (currentState == MENU_STATE) {
+
+				updateMenuState();
+
+			} else if (currentState == GAME_STATE) {
+
+				updateGameState();
+
+			} else if (currentState == END_STATE) {
+
+				updateEndState();
+
+			} else if (currentState == WIN_STATE) {
+
+				updateWinState();
+
+			} else if (currentState == GAME_STATE2) {
+
+				updateGameState2();
+
+			} else if (currentState == WIN_STATE2) {
+
+			}
+			repaint();
+		}
 	}
 
 	public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
