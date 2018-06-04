@@ -2,10 +2,12 @@ package maze;
 
 import java.awt.Graphics;
 
-public class UpProjectile extends GameObject{
+public class UpProjectile extends GameObject {
 
 	int originalX;
 	int originalY;
+	long resetTime = 0;
+
 	public UpProjectile(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		originalX = x;
@@ -15,11 +17,27 @@ public class UpProjectile extends GameObject{
 	void update() {
 		collisionBox.setBounds(x, y, width, height);
 		super.update();
-		y = y - 3;
-		x = x + 2;
-		if (y < -10) {
-			x = originalX;
-			y = originalY;
+		if (MazeRunner.level == 2) {
+			if (y < -10) {
+				resetTime = System.currentTimeMillis();
+				x = originalX;
+				y = originalY;
+			} else {
+				if (resetTime == 0) {
+					y = y - 3;
+					x = x + 2;
+				} else if (System.currentTimeMillis() > resetTime + 1000) {
+					resetTime = 0;
+				}
+			}
+		}
+		if (MazeRunner.level == 1) {
+			y = y - 3;
+			x = x + 2;
+			if (y < -10) {
+				x = originalX;
+				y = originalY;
+			}
 		}
 	}
 

@@ -17,11 +17,14 @@ import javax.swing.Timer;
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int MENU_STATE = 0;
 	int GAME_STATE = 1;
-	int GAME_STATE2 = 10;
+	int GAME_STATE2 = 11;
+	int GAME_STATE3 = 21;
 	int END_STATE = 2;
-	int END_STATE2 = 11;
+	int END_STATE2 = 12;
+	int END_STATE3 = 22;
 	int WIN_STATE = 3;
 	int WIN_STATE2 = 13;
+	int WIN_STATE3 = 23;
 	int currentState = MENU_STATE;
 	int chaserDelay = 100;
 	Font titleFont = new Font("Times New Roman", Font.BOLD, 48);
@@ -247,7 +250,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.addBarrier(new Barrier(200, 161, 30, 89));
 		manager.addBarrier(new Barrier(300, 200, 30, 90));
 		manager.addBarrier(new Barrier(400, 161, 30, 89));
-		manager.addBarrier(new Barrier(500, 200, 30, 90));
+		manager.addBarrier(new Barrier(500, 200, 30, 45));
+		manager.addBarrier(new Barrier(500, 260, 30, 45));
 		manager.addBarrier(new Barrier(600, 161, 30, 89));
 		manager.addBarrier(new Barrier(700, 200, 30, 90));
 		manager.addBarrier(new Barrier(100, 0, 30, 90));
@@ -275,6 +279,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void makeProjectiles2() {
 		manager.addProjectile(new Projectile(120, 161, 10, 10));
 		manager.addLeftProjectile(new LeftProjectile(505, 161, 10, 10));
+		manager.addUpProjectile(new UpProjectile(120, 141, 10, 10));
 	}
 
 	@Override
@@ -306,6 +311,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			} else if (currentState == GAME_STATE) {
 				currentState = END_STATE;
 			} else if (currentState == WIN_STATE) {
+				MazeRunner.level = 2;
 				runner = new Runner(10, 220, 10, 10);
 				chaser = new Chaser(10, 210, 10, 10);
 				manager = new ObjectManager(runner);
@@ -332,11 +338,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				chaserDelay = 200;
 				currentState = GAME_STATE2;
 			} else if (currentState == WIN_STATE2) {
+				currentState = GAME_STATE3;
+			} else if (currentState == END_STATE3) {
+				currentState = GAME_STATE3;
+			} else if (currentState == WIN_STATE3) {
 
 			}
 
 		}
-		if (currentState == GAME_STATE || currentState == GAME_STATE2) {
+		if (currentState == GAME_STATE || currentState == GAME_STATE2 || currentState == GAME_STATE3) {
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				if (runner.x + runner.speed <= 795) {
 					runner.x = runner.x + runner.speed;
@@ -379,7 +389,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			chaser.x = pos.x;
 			chaser.y = pos.y;
 		} else {
-			
+
 		}
 	}
 

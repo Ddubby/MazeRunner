@@ -6,6 +6,8 @@ import java.awt.Graphics;
 public class LeftProjectile extends GameObject {
 	int originalX;
 	int originalY;
+	long resetTime = 0;
+
 	public LeftProjectile(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		originalX = x;
@@ -15,11 +17,17 @@ public class LeftProjectile extends GameObject {
 	void update() {
 		collisionBox.setBounds(x, y, width, height);
 		super.update();
-		y = y + 3;
-		x = x - 2;
 		if (y > MazeRunner.height) {
+			resetTime = System.currentTimeMillis();
 			x = originalX;
 			y = originalY;
+		} else {
+			if (resetTime == 0) {
+				y = y + 3;
+				x = x - 2;
+			} else if (System.currentTimeMillis() > resetTime + 1000) {
+				resetTime = 0;
+			}
 		}
 	}
 

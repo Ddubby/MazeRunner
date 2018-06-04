@@ -139,49 +139,60 @@ public class ObjectManager {
 				upprojectiles.remove(i);
 			}
 		}
+		for (int i = 0; i < leftprojectiles.size(); i++) {
+			if (!leftprojectiles.get(i).isAlive) {
+				leftprojectiles.remove(i);
+			}
+		}
 	}
 
 	void checkCollision() {
-		for (Barrier b : barriers) {
-			if (runner.collisionBox.intersects(b.collisionBox)) {
+		for (Bouncer o : bouncers) {
+			if (runner.collisionBox.intersects(o.collisionBox)) {
 				runner.isAlive = false;
 				break;
-			} else {
-				for (Chaser c : chasers) {
-					if (runner.collisionBox.intersects(c.collisionBox)) {
-						runner.isAlive = false;
-						break;
-					} else {
-						for (Bouncer o : bouncers) {
-							if (runner.collisionBox.intersects(o.collisionBox)) {
-								runner.isAlive = false;
-								break;
-							} else {
-								for (Projectile p : projectiles) {
-									if (runner.collisionBox.intersects(p.collisionBox)) {
-										runner.isAlive = false;
-										break;
-									} else {
-										for (UpProjectile u : upprojectiles) {
-											if (runner.collisionBox.intersects(u.collisionBox)) {
-												runner.isAlive = false;
-												break;
-											} else {
-												for (LeftProjectile l : leftprojectiles) {
-													if (runner.collisionBox.intersects(l.collisionBox)) {
-														runner.isAlive = false;
-														break;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+			}
+		}
+		if (runner.isAlive) {
+			for (Chaser c : chasers) {
+				if (runner.collisionBox.intersects(c.collisionBox)) {
+					runner.isAlive = false;
+					break;
 				}
 			}
 		}
+		if (runner.isAlive) {
+			for (Barrier b : barriers) {
+				if (runner.collisionBox.intersects(b.collisionBox)) {
+					runner.isAlive = false;
+					break;
+				}
+			}
+		}
+		if (runner.isAlive) {
+			for (Projectile p : projectiles) {
+				if (runner.collisionBox.intersects(p.collisionBox)) {
+					runner.isAlive = false;
+					break;
+				}
+			}
+		}
+		if (runner.isAlive) {
+			for (UpProjectile u : upprojectiles) {
+				if (runner.collisionBox.intersects(u.collisionBox)) {
+					runner.isAlive = false;
+					break;
+				}
+			}
+		}
+		if (runner.isAlive) {
+			for (LeftProjectile l : leftprojectiles) {
+				if (runner.collisionBox.intersects(l.collisionBox)) {
+					runner.isAlive = false;
+					break;
+				}
+			}
+		}
+
 	}
 }
