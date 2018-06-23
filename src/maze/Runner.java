@@ -1,5 +1,6 @@
 package maze;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Runner extends GameObject {
