@@ -185,7 +185,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 		}
 	}
-	
+
 	void updateEndState() {
 
 	}
@@ -332,7 +332,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void makeBarriers3() {
-
+		manager.addBarrier(new Barrier(-10, 131, 360, 40));
+		manager.addBarrier(new Barrier(450, 131, 350, 40));
+		manager.addBarrier(new Barrier(380, 0, 40, 100));
+		manager.addBarrier(new Barrier(380, 183, 40, 126));
 	}
 
 	public void makeBouncers3() {
@@ -353,13 +356,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
-			if (currentState == END_STATE || currentState == END_STATE2) {
-				int x;
+			if (currentState == MENU_STATE) {
+				currentState = GAME_STATE;
+			} else if (currentState == END_STATE || currentState == END_STATE2 || currentState == END_STATE3) {
+				int x = 0;
 				if (currentState == END_STATE) {
 					x = 50;
-				} else {
+				} else if (currentState == END_STATE2) {
 					x = 10;
+				} else if (currentState == END_STATE3) {
+					x = 30;
 				}
 				runner = new Runner(x, 220, 10, 10);
 				chaser = new Chaser(x, 210, 10, 10);
@@ -374,45 +380,43 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					manager.addFinishLine(new FinishLine(790, 0, 10, 10));
 					chaserDelay = 100;
 					currentState = GAME_STATE;
-				} else {
+				} else if (currentState == END_STATE2) {
 					manager.addFinishLine(new FinishLine(0, 0, 10, 10));
 					chaserDelay = 150;
 					currentState = GAME_STATE2;
+				} else if (currentState == END_STATE3) {
+					manager.addFinishLine(new FinishLine(0, 0, 10, 10));
+					chaserDelay = 50;
+					currentState = GAME_STATE3;
 				}
-			} else if (currentState == MENU_STATE) {
-				currentState = GAME_STATE;
-			} else if (currentState == GAME_STATE) {
-				currentState = END_STATE;
-			} else if (currentState == WIN_STATE) {
-				MazeRunner.level = 2;
-				runner = new Runner(10, 220, 10, 10);
-				chaser = new Chaser(10, 210, 10, 10);
+			} else if (currentState == WIN_STATE || currentState == WIN_STATE2) {
+				int x;
+				if (currentState == WIN_STATE) {
+					MazeRunner.level = 2;
+					x = 10;
+				} else {
+					MazeRunner.level = 3;
+					x = 30;
+				}
+				runner = new Runner(x, 220, 10, 10);
+				chaser = new Chaser(x, 210, 10, 10);
 				manager = new ObjectManager(runner);
 				makeBouncers();
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.addTeleport(new Teleport(10, 210, 10, 10));
+				manager.addTeleport(new Teleport(x, 210, 10, 10));
 				manager.addFinishLine(new FinishLine(0, 0, 10, 10));
 				trackers = new ArrayList<GameObject>();
-				chaserDelay = 150;
-				currentState = GAME_STATE2;
-			} else if (currentState == WIN_STATE2) {
-				MazeRunner.level = 3;
-				runner = new Runner(30, 220, 10, 10);
-				chaser = new Chaser(30, 210, 10, 10);
-				manager = new ObjectManager(runner);
-				makeBouncers();
-				makeBarriers();
-				makeProjectiles();
-				manager.addChaser(chaser);
-				trackers = new ArrayList<GameObject>();
-				chaserDelay = 50;
-				currentState = GAME_STATE3;
-			} else if (currentState == END_STATE3) {
-				currentState = GAME_STATE3;
+				if (currentState == WIN_STATE) {
+					chaserDelay = 150;
+					currentState = GAME_STATE2;
+				} else {
+					chaserDelay = 50;
+					currentState = GAME_STATE3;
+				}
 			} else if (currentState == WIN_STATE3) {
-				currentState = GAME_STATE3;
+				System.out.println("You win");
 			}
 
 		}
