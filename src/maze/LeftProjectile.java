@@ -17,16 +17,26 @@ public class LeftProjectile extends GameObject {
 	void update() {
 		collisionBox.setBounds(x, y, width, height);
 		super.update();
-		if (y > MazeRunner.height) {
-			resetTime = System.currentTimeMillis();
-			x = originalX;
-			y = originalY;
-		} else {
-			if (resetTime == 0) {
-				y = y + 3;
-				x = x - 2;
-			} else if (System.currentTimeMillis() > resetTime + 1000) {
-				resetTime = 0;
+		if (MazeRunner.level == 2) {
+			if (y > MazeRunner.height) {
+				resetTime = System.currentTimeMillis();
+				x = originalX;
+				y = originalY;
+			} else {
+				if (resetTime == 0) {
+					y = y + 3;
+					x = x - 2;
+				} else if (System.currentTimeMillis() > resetTime + 1000) {
+					resetTime = 0;
+				}
+			}
+		}
+		if (MazeRunner.level == 1 || MazeRunner.level == 3) {
+			y = y + 3;
+			x = x - 2;
+			if (y > MazeRunner.height) {
+				x = originalX;
+				y = originalY;
 			}
 		}
 	}

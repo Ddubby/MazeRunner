@@ -17,7 +17,7 @@ public class UpProjectile extends GameObject {
 	void update() {
 		collisionBox.setBounds(x, y, width, height);
 		super.update();
-		if (MazeRunner.level == 2) {
+		if (MazeRunner.level == 2 || MazeRunner.level == 3) {
 			if (y < -10) {
 				resetTime = System.currentTimeMillis();
 				x = originalX;

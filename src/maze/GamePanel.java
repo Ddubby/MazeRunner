@@ -9,8 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -43,7 +46,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	ArrayList<GameObject> trackers = new ArrayList<GameObject>();
 	Timer timer = new Timer(1000 / 60, this);
 	Timer chaserTimer = new Timer(150, this);
-
+	BufferedImage smileImg;
 	public GamePanel() {
 		makeBarriers();
 		makeBouncers();
@@ -52,6 +55,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.addTeleport(teleport);
 		manager.addFinishLine(finish);
 		manager.addFinishLine(finish2);
+		 try {
+
+	           smileImg = ImageIO.read(this.getClass().getResourceAsStream("smileImg.png"));
+
+	    } catch (IOException e) {
+
+	            // TODO Auto-generated catch block
+
+	            e.printStackTrace();
+
+	    }
 	}
 
 	void drawMenuState(Graphics g) {
@@ -127,6 +141,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		drawCenteredString(g, "Congrats!", r, titleFont);
 		g.setFont(enterFont);
 		g.drawString("Press Enter to Continue", 275, 225);
+		g.drawString("For a challenge", 322, 250);
 		g.drawString("Level 2 passed!", 323, 200);
 	}
 
@@ -143,96 +158,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void drawFinalState(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 800, 800);
-		Rectangle r = new Rectangle(0, 0, 800, 800);
-		g.setColor(Color.YELLOW);
-		g.drawLine(100, 400, 700, 400);
-		g.drawLine(102, 395, 698, 395);
-		g.drawLine(102, 405, 698, 405);
-		g.drawLine(104, 390, 696, 390);
-		g.drawLine(104, 410, 696, 410);
-		g.drawLine(106, 385, 694, 385);
-		g.drawLine(106, 415, 694, 415);
-		g.drawLine(108, 380, 692, 380);
-		g.drawLine(108, 420, 692, 420);
-		g.drawLine(110, 375, 690, 375);
-		g.drawLine(110, 425, 690, 425);
-		g.drawLine(111, 370, 689, 370);
-		g.drawLine(111, 430, 689, 430);
-		g.drawLine(112, 365, 688, 365);
-		g.drawLine(112, 435, 688, 435);
-		g.drawLine(113, 360, 687, 360);
-		g.drawLine(113, 440, 687, 440);
-		g.drawLine(114, 355, 686, 355);
-		g.drawLine(114, 445, 686, 445);
-		g.drawLine(115, 350, 685, 350);
-		g.drawLine(115, 450, 685, 450);
-		g.drawLine(116, 345, 684, 345);
-		g.drawLine(116, 455, 684, 455);
-		g.drawLine(117, 340, 683, 340);
-		g.drawLine(117, 460, 683, 460);
-		g.drawLine(118, 335, 682, 335);
-		g.drawLine(118, 465, 682, 465);
-		g.drawLine(119, 330, 681, 330);
-		g.drawLine(119, 470, 681, 470);
-		g.drawLine(120, 325, 680, 325);
-		g.drawLine(120, 475, 680, 475);
-		g.drawLine(122, 320, 678, 320);
-		g.drawLine(122, 480, 678, 480);
-		g.drawLine(124, 315, 676, 315);
-		g.drawLine(124, 485, 676, 485);
-		g.drawLine(126, 310, 674, 310);
-		g.drawLine(126, 490, 674, 490);
-		g.drawLine(128, 305, 672, 305);
-		g.drawLine(128, 495, 672, 495);
-		g.drawLine(130, 300, 670, 300);
-		g.drawLine(130, 500, 670, 500);
-		g.drawLine(131, 295, 669, 295);
-		g.drawLine(131, 505, 669, 505);
-		g.drawLine(132, 290, 668, 290);
-		g.drawLine(132, 510, 668, 510);
-		g.drawLine(133, 285, 667, 285);
-		g.drawLine(133, 515, 667, 515);
-		g.drawLine(134, 280, 666, 280);
-		g.drawLine(134, 520, 666, 520);
-		g.drawLine(135, 275, 665, 275);
-		g.drawLine(135, 525, 665, 525);
-		g.drawLine(136, 270, 664, 270);
-		g.drawLine(136, 530, 664, 530);
-		g.drawLine(137, 265, 663, 265);
-		g.drawLine(137, 535, 663, 535);
-		g.drawLine(138, 260, 662, 260);
-		g.drawLine(138, 540, 662, 540);
-		g.drawLine(139, 255, 661, 255);
-		g.drawLine(139, 545, 661, 545);
-		g.drawLine(140, 250, 660, 250);
-		g.drawLine(140, 550, 660, 550);
-		g.drawLine(145, 245, 655, 245);
-		g.drawLine(145, 555, 655, 555);
-		g.drawLine(150, 240, 650, 240);
-		g.drawLine(150, 560, 650, 560);
-		g.drawLine(155, 235, 645, 235);
-		g.drawLine(155, 565, 645, 565);
-		g.drawLine(160, 230, 640, 230);
-		g.drawLine(160, 570, 640, 570);
-		g.drawLine(165, 225, 635, 225);
-		g.drawLine(165, 575, 635, 575);
-		g.drawLine(170, 220, 630, 220);
-		g.drawLine(170, 580, 630, 580);
-		g.drawLine(180, 215, 620, 215);
-		g.drawLine(180, 585, 620, 585);
-		g.drawLine(190, 210, 610, 210);
-		g.drawLine(190, 590, 610, 590);
-		g.drawLine(200, 205, 600, 205);
-		g.drawLine(200, 595, 600, 595);
-		g.drawLine(220, 200, 580, 200);
-		g.drawLine(220, 600, 580, 600);
-		g.drawLine(240, 195, 560, 195);
-		g.drawLine(240, 605, 560, 605);
-		g.drawLine(260, 190, 540, 190);
-		g.drawLine(260, 610, 540, 610);
-		g.drawLine(280, 185, 520, 185);
-		g.drawLine(280, 615, 520, 615);
+		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
+		g.drawImage(smileImg, 200, 80, 50, 50, null);
 	}
 
 	void updateMenuState() {
@@ -410,15 +337,28 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.addBarrier(new Barrier(-10, 131, 360, 40));
 		manager.addBarrier(new Barrier(450, 131, 350, 40));
 		manager.addBarrier(new Barrier(380, 0, 40, 100));
-		manager.addBarrier(new Barrier(380, 183, 40, 126));
+		manager.addBarrier(new Barrier(380, 203, 40, 100));
+		manager.addBarrier(new Barrier(-10, -10, 20, 141));
+		manager.addBarrier(new Barrier(-10, 171, 20, 152));
+		manager.addBarrier(new Barrier(790, -10, 20, 141));
+		manager.addBarrier(new Barrier(790, 171, 20, 152));
 	}
 
 	public void makeBouncers3() {
-
+		manager.addBouncer(new Bouncer(10, 110, 10, 10));
+		manager.addBouncer(new Bouncer(780, 110, 10, 10));
+		manager.addBouncer(new Bouncer(10, 93, 10, 10));
+		manager.addBouncer(new Bouncer(780, 93, 10, 10));
+		manager.addBouncer(new Bouncer(10, 183, 10, 10));
+		manager.addBouncer(new Bouncer(780, 183, 10, 10));
+		manager.addBouncer(new Bouncer(10, 200, 10, 10));
+		manager.addBouncer(new Bouncer(780, 200, 10, 10));
 	}
 
 	public void makeProjectiles3() {
-
+		manager.addProjectile(new Projectile(297, 0, 10, 10));
+		manager.addLeftProjectile(new LeftProjectile(497, 0, 10, 10));
+		manager.addUpProjectile(new UpProjectile(50, 121, 10, 10));
 	}
 
 	@Override
@@ -487,8 +427,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					chaserDelay = 150;
 					currentState = GAME_STATE2;
 				} else {
-					chaserDelay = 50;
+					chaserDelay = 75;
 					currentState = GAME_STATE3;
+				}
+				if (currentState == GAME_STATE3) {
+					//change speed
+					timer.setDelay(1000 / 100);
 				}
 			} else if (currentState == WIN_STATE3) {
 				currentState = FINAL_STATE;
