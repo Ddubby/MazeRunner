@@ -34,14 +34,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Font titleFont = new Font("Times New Roman", Font.BOLD, 48);
 	Font enterFont = new Font("Times New Roman", Font.BOLD, 24);
 	Font instructionFont = new Font("Times New Roman", Font.BOLD, 20);
-	static Runner runner = new Runner(50, 220, 10, 10);
+	static Runner runner = new Runner(50, 230, 10, 10);
 	Chaser chaser = new Chaser(50, 200, 10, 10);
-	FinishLine finish = new FinishLine(790, 0, 10, 10);
-	FinishLine finish2 = new FinishLine(0, 0, 10, 10);
 	Blank blank = new Blank(50, 200, 10, 10);
-	Blank blank2 = new Blank(10, 200, 10, 10);
-	Blank blank3 = new Blank(30, 200, 10, 10);
-	Teleport teleport = new Teleport(50, 230, 10, 10);
+	Blank blank2 = new Blank(20, 200, 10, 10);
+	Blank blank3 = new Blank(30, 230, 10, 10);
+	Blank blank4 = new Blank(35, 200, 10, 10);
+	Blank blank5 = new Blank(65, 200, 10, 10);
+	Blank blank6 = new Blank(50, 215, 10, 10);
+	Blank blank7 = new Blank(50, 185, 10, 10);
+	Blank blank8 = new Blank(5, 200, 10, 10);
+	Blank blank9 = new Blank(35, 200, 10, 10);
+	Blank blank10 = new Blank(20, 215, 10, 10);
+	Blank blank11 = new Blank(20, 185, 10, 10);
+	Blank blank12 = new Blank(15, 230, 10, 10);
+	Blank blank13 = new Blank(45, 230, 10, 10);
+	Blank blank14 = new Blank(30, 245, 10, 10);
+	Blank blank15 = new Blank(30, 215, 10, 10);
 	ObjectManager manager = new ObjectManager(runner);
 	ArrayList<GameObject> trackers = new ArrayList<GameObject>();
 	Timer timer = new Timer(1000 / 60, this);
@@ -52,9 +61,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		makeBouncers();
 		makeProjectiles();
 		manager.addChaser(chaser);
-		manager.addTeleport(teleport);
-		manager.addFinishLine(finish);
-		manager.addFinishLine(finish2);
 		 try {
 
 	           smileImg = ImageIO.read(this.getClass().getResourceAsStream("smileImg.png"));
@@ -89,13 +95,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		runner.draw(g);
 		g.setColor(Color.YELLOW);
 		chaser.draw(g);
-		if (currentState == GAME_STATE) {
-			finish.draw(g);
-		} else if (currentState == GAME_STATE2) {
-			finish2.draw(g);
-		} else if (currentState == GAME_STATE3) {
-
-		}
 		g.setColor(Color.BLACK);
 		if (currentState == GAME_STATE) {
 			blank.draw(g);
@@ -104,7 +103,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		} else if (currentState == GAME_STATE3) {
 			blank3.draw(g);
 		}
-		teleport.draw(g);
+		g.setColor(Color.magenta);
+		if (currentState == GAME_STATE) {
+			blank4.draw(g);
+			blank5.draw(g);
+			blank6.draw(g);
+			blank7.draw(g);
+		} else if (currentState == GAME_STATE2) {
+			blank8.draw(g);
+			blank9.draw(g);
+			blank10.draw(g);
+			blank11.draw(g);
+		} else if (currentState == GAME_STATE3) {
+			blank12.draw(g);
+			blank13.draw(g);
+			blank14.draw(g);
+			blank15.draw(g);
+		}
 		g.setColor(Color.darkGray);
 		if (currentState == GAME_STATE2) {
 			g.drawLine(500, 245, 500, 260);
@@ -353,6 +368,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.addBouncer(new Bouncer(780, 183, 10, 10));
 		manager.addBouncer(new Bouncer(10, 200, 10, 10));
 		manager.addBouncer(new Bouncer(780, 200, 10, 10));
+		manager.addBouncer(new Bouncer(350, 260, 10, 10));
+		manager.addBouncer(new Bouncer(10, 270, 10, 10));
+		manager.addBouncer(new Bouncer(350, 0, 10, 10));
+		manager.addBouncer(new Bouncer(10, 10, 10, 10));
+		manager.addBouncer(new Bouncer(420, 260, 10, 10));
+		manager.addBouncer(new Bouncer(780, 270, 10, 10));
+		manager.addBouncer(new Bouncer(420, 0, 10, 10));
+		manager.addBouncer(new Bouncer(780, 10, 10, 10));
 	}
 
 	public void makeProjectiles3() {
@@ -375,59 +398,74 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState = GAME_STATE;
 			} else if (currentState == END_STATE || currentState == END_STATE2 || currentState == END_STATE3) {
 				int x = 0;
+				int y = 0; 
+				int chaserY = 0;
 				if (currentState == END_STATE) {
 					x = 50;
+					y = 230;
+					chaserY = 200;
 				} else if (currentState == END_STATE2) {
-					x = 10;
+					x = 20;
+					y = 230;
+					chaserY = 200;
 				} else if (currentState == END_STATE3) {
 					x = 30;
+					y = 260;
+					chaserY = 230;
 				}
-				runner = new Runner(x, 220, 10, 10);
-				chaser = new Chaser(x, 200, 10, 10);
+				runner = new Runner(x, y, 10, 10);
+				chaser = new Chaser(x, chaserY, 10, 10);
 				manager = new ObjectManager(runner);
 				makeBouncers();
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.addTeleport(new Teleport(x, 230, 10, 10));
+				manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == END_STATE) {
-					manager.addFinishLine(new FinishLine(790, 0, 10, 10));
+					manager.moveFinishLine(790, 0);
 					chaserDelay = 100;
 					currentState = GAME_STATE;
 				} else if (currentState == END_STATE2) {
-					manager.addFinishLine(new FinishLine(0, 0, 10, 10));
+					manager.moveFinishLine(0, 0);
 					chaserDelay = 150;
 					currentState = GAME_STATE2;
 				} else if (currentState == END_STATE3) {
-					manager.addFinishLine(new FinishLine(0, 0, 10, 10));
+					manager.moveFinishLine(10, 0);
 					chaserDelay = 50;
 					currentState = GAME_STATE3;
 				}
 			} else if (currentState == WIN_STATE || currentState == WIN_STATE2) {
 				int x;
+				int y;
+				int chaserY;
 				if (currentState == WIN_STATE) {
 					MazeRunner.level = 2;
-					x = 10;
+					x = 20;
+					y = 230;
+					chaserY = 200;
 				} else {
 					MazeRunner.level = 3;
 					x = 30;
+					y = 260;
+					chaserY = 230;
 				}
-				runner = new Runner(x, 220, 10, 10);
-				chaser = new Chaser(x, 200, 10, 10);
+				runner = new Runner(x, y, 10, 10);
+				chaser = new Chaser(x, chaserY, 10, 10);
 				manager = new ObjectManager(runner);
 				makeBouncers();
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.addTeleport(new Teleport(x, 230, 10, 10));
-				manager.addFinishLine(new FinishLine(0, 0, 10, 10));
+				manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == WIN_STATE) {
 					chaserDelay = 150;
+					manager.moveFinishLine(0, 0);
 					currentState = GAME_STATE2;
 				} else {
 					chaserDelay = 75;
+					manager.moveFinishLine(10, 0);
 					currentState = GAME_STATE3;
 				}
 				if (currentState == GAME_STATE3) {

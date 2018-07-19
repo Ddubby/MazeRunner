@@ -1,15 +1,16 @@
 package maze;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class ObjectManager {
 	Runner runner;
+	FinishLine finish = new FinishLine(790, 0, 10, 10);
+	Teleport teleport = new Teleport(50, 220, 10, 10);
 	ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 	ArrayList<Chaser> chasers = new ArrayList<Chaser>();
 	ArrayList<Bouncer> bouncers = new ArrayList<Bouncer>();
-	ArrayList<Teleport> teleporters = new ArrayList<Teleport>();
-	ArrayList<FinishLine> finishLines = new ArrayList<FinishLine>();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	ArrayList<UpProjectile> upprojectiles = new ArrayList<UpProjectile>();
 	ArrayList<LeftProjectile> leftprojectiles = new ArrayList<LeftProjectile>();
@@ -27,12 +28,6 @@ public class ObjectManager {
 		for (Bouncer o : bouncers) {
 			o.update();
 		}
-		for (Teleport t : teleporters) {
-			t.update();
-		}
-		for (FinishLine f : finishLines) {
-			f.update();
-		}
 		for (Projectile p : projectiles) {
 			p.update();
 		}
@@ -42,9 +37,15 @@ public class ObjectManager {
 		for (LeftProjectile l : leftprojectiles) {
 			l.update();
 		}
+		teleport.update();
+		finish.update();
 	}
 
 	void draw(Graphics g) {
+		g.setColor(Color.YELLOW);
+		finish.draw(g);
+		g.setColor(Color.BLACK);
+		teleport.draw(g);
 		for (Barrier b : barriers) {
 			b.draw(g);
 		}
@@ -75,14 +76,6 @@ public class ObjectManager {
 		bouncers.add(o);
 	}
 
-	void addTeleport(Teleport t) {
-		teleporters.add(t);
-	}
-
-	void addFinishLine(FinishLine f) {
-		finishLines.add(f);
-	}
-
 	void addProjectile(Projectile p) {
 		projectiles.add(p);
 	}
@@ -95,6 +88,14 @@ public class ObjectManager {
 		leftprojectiles.add(l);
 	}
 
+	void moveFinishLine(int x, int y) {
+		finish.x = x;
+		finish.y = y;
+	}
+	void moveTeleporter(int x, int y) {
+		teleport.x = x;
+		teleport.y = y;
+	}
 	void checkBouncerCollision() {
 		for (Bouncer o : bouncers) {
 			boolean intersects = false;
@@ -113,20 +114,15 @@ public class ObjectManager {
 	}
 
 	void checkWin() {
-		for (Teleport t : teleporters) {
-			if (runner.collisionBox.intersects(t.collisionBox)) {
+			if (runner.collisionBox.intersects(teleport.collisionBox)) {
 				runner.Wins = true;
-				break;
 			} else {
-				for (FinishLine f : finishLines) {
-					if (runner.collisionBox.intersects(f.collisionBox)) {
+
+					if (runner.collisionBox.intersects(finish.collisionBox)) {
 						runner.Wins = true;
-						break;
 					}
 				}
 			}
-		}
-	}
 
 	void purgeObjects() {
 		for (int i = 0; i < projectiles.size(); i++) {
