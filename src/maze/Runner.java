@@ -14,6 +14,7 @@ public class Runner extends GameObject {
 	collisionBox.setBounds(x, y, width, height);
 	}
 	void draw(Graphics g) {
+		g.setColor(Color.RED);
 		g.drawRect(x, y, width, height);
 	}
 }
