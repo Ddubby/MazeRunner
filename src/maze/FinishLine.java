@@ -1,5 +1,6 @@
 package maze;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class FinishLine extends GameObject {
@@ -13,6 +14,7 @@ public class FinishLine extends GameObject {
 	}
 
 	void draw(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawRect(x, y, width, height);
 	}
 }

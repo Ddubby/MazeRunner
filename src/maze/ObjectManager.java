@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ObjectManager {
 	Runner runner;
-	FinishLine finish = new FinishLine(790, 0, 10, 10);
+	FinishLine finish = new FinishLine(785, 0, 15, 15);
 	Teleport teleport = new Teleport(50, 220, 10, 10);
 	ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 	ArrayList<Chaser> chasers = new ArrayList<Chaser>();
@@ -42,7 +42,6 @@ public class ObjectManager {
 	}
 
 	void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
 		finish.draw(g);
 		g.setColor(Color.BLACK);
 		teleport.draw(g);
