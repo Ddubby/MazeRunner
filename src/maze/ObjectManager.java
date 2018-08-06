@@ -3,11 +3,11 @@ package maze;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-
+//Teleport class is used for testing stages
 public class ObjectManager {
 	Runner runner;
 	FinishLine finish = new FinishLine(785, 0, 15, 15);
-	Teleport teleport = new Teleport(50, 220, 10, 10);
+	//Teleport teleport = new Teleport(50, 220, 10, 10);
 	ArrayList<Barrier> barriers = new ArrayList<Barrier>();
 	ArrayList<Chaser> chasers = new ArrayList<Chaser>();
 	ArrayList<Bouncer> bouncers = new ArrayList<Bouncer>();
@@ -37,14 +37,14 @@ public class ObjectManager {
 		for (LeftProjectile l : leftprojectiles) {
 			l.update();
 		}
-		teleport.update();
+		//teleport.update();
 		finish.update();
 	}
 
 	void draw(Graphics g) {
 		finish.draw(g);
 		g.setColor(Color.BLACK);
-		teleport.draw(g);
+		//teleport.draw(g);
 		for (Barrier b : barriers) {
 			b.draw(g);
 		}
@@ -91,10 +91,11 @@ public class ObjectManager {
 		finish.x = x;
 		finish.y = y;
 	}
-	void moveTeleporter(int x, int y) {
+	//Method to move teleport object
+	/*void moveTeleporter(int x, int y) {
 		teleport.x = x;
 		teleport.y = y;
-	}
+	}*/
 	void checkBouncerCollision() {
 		for (Bouncer o : bouncers) {
 			boolean intersects = false;
@@ -113,14 +114,15 @@ public class ObjectManager {
 	}
 
 	void checkWin() {
-			if (runner.collisionBox.intersects(teleport.collisionBox)) {
+		//Method to allow teleport object to teleport from level to level
+		/*if (runner.collisionBox.intersects(teleport.collisionBox)) {
 				runner.Wins = true;
-			} else {
+			} else {*/
 
 					if (runner.collisionBox.intersects(finish.collisionBox)) {
 						runner.Wins = true;
 					}
-				}
+			//	}
 			}
 
 	void purgeObjects() {

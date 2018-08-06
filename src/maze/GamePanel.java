@@ -44,7 +44,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	AudioClip sound;
 	AudioClip win;
 	AudioClip loss;
-	Image icon;
 	static Runner runner = new Runner(50, 230, 10, 10);
 	Chaser chaser = new Chaser(50, 200, 10, 10);
 	Blank blank = new Blank(50, 200, 10, 10);
@@ -161,8 +160,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(enterFont);
 		g.drawString("Press Enter to Continue", 275, 225);
 		g.drawString("Level 1 passed!", 323, 200);
-		//g.drawImage(icon, -450, -100, null);
-		//g.drawImage(icon, 530, -100, null);
 	}
 
 	void drawWinState2(Graphics g) {
@@ -206,7 +203,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("enjoy tougher and more difficult games.", 220, 100);
 		g.drawString("Runner: This is you, who must escape the maze to win the prize", 70, 125);
 		g.drawString("Chaser: An enemy that follows you (the runner) after a brief period of time,", 70, 150);
-		g.drawString("if you run into it, game over.", 143, 175);
+		g.drawString("if you run into it, game over. Chaser spawns from spawners (in pink).", 143, 175);
 		g.drawString("Barrier: The walls of the game that end the game if ran into.", 70, 200);
 		g.drawString("Bouncer: An enemy that bounces off of the barriers, touch it, then game over.", 70, 225);
 		g.drawString("Projectile: An enemy that attacks diagonally, game over if ran into.", 70, 250);
@@ -266,13 +263,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void startGame() {
 		timer.start();
 		chaserTimer.start();
-		try {
-			icon = new ImageIcon(new URL("https://i.imgur.com/1MYFeq1.gif")).getImage();
-			//icon.getScaledInstance(width, height, hints)
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void paintComponent(Graphics g) {
@@ -506,7 +496,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.moveTeleporter(x, 220);
+				//manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == END_STATE) {
 					manager.moveFinishLine(790, 0);
@@ -552,7 +542,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.moveTeleporter(x, 220);
+				//manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == WIN_STATE) {
 					chaserDelay = 150;
