@@ -44,6 +44,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	AudioClip sound;
 	AudioClip win;
 	AudioClip loss;
+	AudioClip victory;
 	static Runner runner = new Runner(50, 230, 10, 10);
 	Chaser chaser = new Chaser(50, 200, 10, 10);
 	Blank blank = new Blank(50, 200, 10, 10);
@@ -68,22 +69,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Timer clock = new Timer(1000 / 1, this);
 	long clockTicks = 0;
 	BufferedImage trophy;
+
 	public GamePanel() {
 		makeBarriers();
 		makeBouncers();
 		makeProjectiles();
 		manager.addChaser(chaser);
-		 try {
+		try {
 
-	           trophy = ImageIO.read(this.getClass().getResourceAsStream("trophy.jpg"));
+			trophy = ImageIO.read(this.getClass().getResourceAsStream("trophy.jpg"));
 
-	    } catch (IOException e) {
+		} catch (IOException e) {
 
-	            // TODO Auto-generated catch block
+			// TODO Auto-generated catch block
 
-	            e.printStackTrace();
+			e.printStackTrace();
 
-	    }
+		}
 	}
 
 	void drawMenuState(Graphics g) {
@@ -184,7 +186,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press Enter to Continue", 275, 225);
 		g.drawString("Level 3 passed!", 323, 200);
 	}
-	
+
 	void drawInstructionState(Graphics g) {
 		Runner example = new Runner(47, 112, 10, 10);
 		Chaser example2 = new Chaser(47, 137, 10, 10);
@@ -201,13 +203,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(instructionFont);
 		g.drawString("In total, there are 3 levels to this game. This game is recommended for those who", 50, 80);
 		g.drawString("enjoy tougher and more difficult games.", 220, 100);
-		g.drawString("Runner: This is you, who must escape the maze to win the prize", 70, 125);
+		g.drawString("Runner: This is you, who must escape the maze to win the prize.", 70, 125);
 		g.drawString("Chaser: An enemy that follows you (the runner) after a brief period of time,", 70, 150);
 		g.drawString("if you run into it, game over. Chaser spawns from spawners (in pink).", 143, 175);
 		g.drawString("Barrier: The walls of the game that end the game if ran into.", 70, 200);
 		g.drawString("Bouncer: An enemy that bounces off of the barriers, touch it, then game over.", 70, 225);
 		g.drawString("Projectile: An enemy that attacks diagonally, game over if ran into.", 70, 250);
-		g.drawString("Finish Line: The escape way for each level, touch it to pass each level", 70, 275);
+		g.drawString("Finish Line: The escape way for each level, touch it to pass each level.", 70, 275);
 		example.draw(g);
 		example2.draw(g);
 		example3.draw(g);
@@ -215,18 +217,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		example5.draw(g);
 		example6.draw(g);
 	}
-	
+
 	void drawFinalState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, MazeRunner.width, MazeRunner.height);
 		g.drawImage(trophy, 290, 10, 200, 200, null);
 		g.setFont(enterFont);
 		g.setColor(Color.RED);
-		g.drawString("Congratulations! You beat the Maze Runner in "+clockTicks+" seconds!", 90, 250);
+		g.drawString("Congratulations! You beat the Maze Runner in " + clockTicks + " seconds!", 90, 250);
 		g.drawString("Well done! Here is your trophy.", 220, 275);
-		
-	}
 
+	}
 
 	void updateGameState() {
 		manager.update();
@@ -271,9 +272,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawMenuState(g);
 
 		} else if (currentState == INSTRUCTION_STATE) {
-			
+
 			drawInstructionState(g);
-			
+
 		} else if (currentState == GAME_STATE || currentState == GAME_STATE2 || currentState == GAME_STATE3) {
 
 			drawGameState(g);
@@ -309,7 +310,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void playWin() {
 		try {
 			win = JApplet.newAudioClip(getClass().getResource("win.wav"));
@@ -318,7 +319,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void playLoss() {
 		try {
 			loss = JApplet.newAudioClip(getClass().getResource("loss.wav"));
@@ -327,7 +328,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			ex.printStackTrace();
 		}
 	}
-	
+
+	public void playVictory() {
+		try {
+			victory = JApplet.newAudioClip(getClass().getResource("victory.wav"));
+			victory.play();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public void makeBarriers() {
 		if (MazeRunner.level == 1) {
 			makeBarriers1();
@@ -474,7 +484,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState = GAME_STATE;
 			} else if (currentState == END_STATE || currentState == END_STATE2 || currentState == END_STATE3) {
 				int x = 0;
-				int y = 0; 
+				int y = 0;
 				int chaserY = 0;
 				if (currentState == END_STATE) {
 					x = 50;
@@ -496,7 +506,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				//manager.moveTeleporter(x, 220);
+				manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == END_STATE) {
 					manager.moveFinishLine(790, 0);
@@ -542,7 +552,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				//manager.moveTeleporter(x, 220);
+				manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == WIN_STATE) {
 					chaserDelay = 150;
@@ -560,10 +570,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					currentState = GAME_STATE3;
 				}
 				if (currentState == GAME_STATE3) {
-					//change speed
+					// change speed
 					timer.setDelay(1000 / 100);
 				}
 			} else if (currentState == WIN_STATE3) {
+				win.stop();
+				playVictory();
 				currentState = FINAL_STATE;
 			}
 
@@ -630,13 +642,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 				updateGameState();
 
-			} 
+			}
 			repaint();
 		}
 		if (e.getSource() == clock) {
-			
+
 			clockTicks++;
-			
+
 		}
 	}
 
