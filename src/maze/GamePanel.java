@@ -263,7 +263,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void startGame() {
 		timer.start();
-		chaserTimer.start();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -506,7 +505,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.moveTeleporter(x, 220);
+				//manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == END_STATE) {
 					manager.moveFinishLine(790, 0);
@@ -552,7 +551,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				makeBarriers();
 				makeProjectiles();
 				manager.addChaser(chaser);
-				manager.moveTeleporter(x, 220);
+				//manager.moveTeleporter(x, 220);
 				trackers = new ArrayList<GameObject>();
 				if (currentState == WIN_STATE) {
 					chaserDelay = 150;
@@ -605,6 +604,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					runner.y = runner.y - runner.speed;
 					trackers.add(new GameObject(runner.x, runner.y, 0, 0));
 				}
+			}
+			if (currentState == GAME_STATE) {
+				chaserTimer.start();
 			}
 
 			repaint();
